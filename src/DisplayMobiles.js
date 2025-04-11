@@ -5,22 +5,22 @@ import Header from "./Header";
 
 export default function Mobile() {
     return (
-        <div className="main">
+        <div className="shopping-container">
             <Header />
-            <div className="main-content">
-                <div className="content">
-                    {MobileItems.map((item, index) => (
+            <div className="shopping-content">
+                <div className="digital-item">
+                    {MobileItems.map((item) => (
                         <Calculation
-                            key={index}
+                            id={item.id}
                             image={item.image}
                             name={item.name}
-                            cost={item.cost}
+                            cost={item.cost}    
                         />
                     ))}
                 </div>
             </div>
             <div className="footer">
-                <p>Thanks for the Shopping</p>
+                <p>Happy Shopping</p>
             </div>
         </div>
     );

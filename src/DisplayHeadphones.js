@@ -5,13 +5,13 @@ import Header from "./Header";
 
 export default function Headphone() {
     return (
-        <div className="main">
+        <div className="shopping-container">
             <Header />
-            <div className="main-content">
-                <div className="content">
-                    {HeadphoneItems.map((item, index) => (
+            <div className="shopping-content">
+                <div className="digital-item">
+                    {HeadphoneItems.map((item) => (
                         <Calculation
-                            key={index}
+                            id={item.id}
                             image={item.image}
                             name={item.name}
                             cost={item.cost}
@@ -20,7 +20,7 @@ export default function Headphone() {
                 </div>
             </div>
             <div className="footer">
-                <p>Thanks for the Shopping</p>
+                <p>Happy Shopping</p>
             </div>
         </div>
     );

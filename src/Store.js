@@ -8,25 +8,51 @@ const persistConfig = {
   storage,
 };
 
-const cartSlice = createSlice({
-  name: 'cart',
+const cartItemSlice = createSlice({
+  name: 'shopCartItem',
   initialState: { items: [] },
   reducers: {
-    addItem: (state, action) => {
+    cartItem: (state, action) => {
       state.items.push(action.payload);
     },
-  },
+    removeCartItem: (state, action) => {
+      state.items = state.items.filter((item) => item.id !== action.payload);
+    },
+    updateCartItem: (state, action) => {
+      const { id, count, totalCost } = action.payload;
+      const item = state.items.find(item => item.id === id);
+      if (item) {
+        item.count = count;
+        item.totalCost = totalCost;
+      }
+    }
+  }
 });
 
-export const { addItem } = cartSlice.actions;
+const wishlistItemSlice = createSlice({
+  name: 'shopWishlistItem',
+  initialState: { items: [] },
+  reducers: {
+    wishlistItem: (state, action) => {
+      state.items.push(action.payload);
+    },
+    removeWishlistItem: (state, action) => {
+      state.items = state.items.filter((item) => item.id !== action.payload);
+    },
+  }
+});
 
-const persistedReducer = persistReducer(persistConfig, cartSlice.reducer);
+export const { cartItem, removeCartItem, updateCartItem } = cartItemSlice.actions;
+export const { wishlistItem, removeWishlistItem } = wishlistItemSlice.actions;
+
+const cartReducer = persistReducer(persistConfig, cartItemSlice.reducer);
+const wishlistReducer = persistReducer(persistConfig, wishlistItemSlice.reducer);
 
 export const store = configureStore({
   reducer: {
-    cart: persistedReducer,
+    shopCartItem: cartReducer,
+    shopWishlistItem: wishlistReducer,
   },
 });
 
 export const persistor = persistStore(store);
-
