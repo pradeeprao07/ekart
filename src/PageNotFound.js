@@ -1,7 +1,7 @@
 function PageNotFound() {
     return (
         <div className="error">
-            <p className="notfound">Page not Found!</p>
+            <p className="notfound">Error - Page not Found!</p>
         </div>
     )
 }

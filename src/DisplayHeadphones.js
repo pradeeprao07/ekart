@@ -12,9 +12,9 @@ export default function Headphone() {
                     {HeadphoneItems.map((item) => (
                         <Calculation
                             id={item.id}
-                            image={item.image}
+                            thumbnail={item.thumbnail}
                             name={item.name}
-                            cost={item.cost}
+                            price={item.price}
                         />
                     ))}
                 </div>

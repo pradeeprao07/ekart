@@ -4,47 +4,45 @@ import { FiHeart } from "react-icons/fi";
 import { useDispatch } from 'react-redux';
 import { cartItem, updateCartItem, wishlistItem } from "./Store";
 import { Button } from 'antd';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-export default function Calculation({ id, image, name, cost }) {
+export default function Calculation({ id, thumbnail, name, price }) { // importing as a props
     const [count, setCount] = useState(1);
-    const [product, setProduct] = useState(cost);
+    const [multiple, setMultiple] = useState(price);
     const [toggleCart, setToggleCart] = useState(false);
     const [toggleWishlist, setToggleWishlist] = useState(false);
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); // sends the updated information to store (what exactly has to been updated)
 
     const Increment = () => {
-        const newCounter = count + 1;
-        setCount(newCounter);
-        setProduct(newCounter * cost);
-        dispatch(updateCartItem({ id, count: newCounter, cost: product }))
+        const itemCount = count + 1;
+        setCount(itemCount);
+        setMultiple(itemCount * price);
+        dispatch(updateCartItem({ id, count: itemCount, price: multiple })) // id, count, price are info being sent to store (later this will be updated on cart page)
     }
 
     const Decrement = () => {
         if (count > 1) {
-            const newCounter = count - 1;
-            setCount(newCounter);
-            setProduct(newCounter * cost);
-            dispatch(updateCartItem({ id, count: newCounter, cost: product }))
+            const itemCount = count - 1;
+            setCount(itemCount);
+            setMultiple(itemCount * price);
+            dispatch(updateCartItem({ id, count: itemCount, price: multiple }))
         }
     }
 
     const addItemToWishlist = () => {
         if (!toggleWishlist) {
-            dispatch(wishlistItem({ id, image, name, cost, count }));
-            console.log({ "id": id, "name": name, "cost": cost }, "wishlist-items")
+            dispatch(wishlistItem({ id, thumbnail, name, price, count })); // wishlist item info to send for the store and these can be used anywhere since its a global store
+            console.log({ "id": id, "name": name, "price": price }, "wishlist-items")
             setToggleWishlist(true)
-        } else {
-            navigate('/cart')
         }
     }
 
     const addItemToCart = () => {
         if (!toggleCart) {
-            dispatch(cartItem({ id, image, name, cost, totalCost: product, count }));
-            console.log({ "id": id, "name": name, "cost": cost }, "cart-items")
+            dispatch(cartItem({ id, thumbnail, name, price, totalCost: multiple, count })); // cart item info to send for the store and these can be used anywhere since its a global store
+            console.log({ "id": id, "name": name, "price": price }, "cart-items")
             setToggleCart(true)
         } else {
             navigate('/cart')
@@ -58,10 +56,12 @@ export default function Calculation({ id, image, name, cost }) {
                 onClick={addItemToWishlist}
                 style={{ color: toggleWishlist ? "red" : "black" }}
             />
-            <img src={image} />
-            <h3>{name}</h3>
-            <p>Price: ₹{cost}</p>
-            <p>Total Price: ₹{product}</p>
+            <Link to={`/product/${id}`}> {/* updates ids of the url path on every thumbnails */}
+                <img src={thumbnail} />
+            </Link>
+            <h3 className="itemName">{name}</h3>
+            <p>Price: ₹{price}</p>
+            <p>Total Price: ₹{multiple}</p>
             <div className="add-item-section">
                 <RxPlusCircled className="btn" onClick={Increment}>+</RxPlusCircled>
                 <div className="countNumber"> {count} </div>

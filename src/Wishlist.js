@@ -1,49 +1,47 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import Header from "./Header";
-import { Button } from 'antd';
-import { cartItem, removeWishlistItem } from './Store';
-import { useState } from 'react';
+import { Button } from "antd";
+import { removeWishlistItem, cartItem } from "./Store";
 
 export default function Wishlist() {
     const dispatch = useDispatch();
-    const [toggle, setToggle] = useState(false);
-
     const wishlistItems = useSelector((state) => state.shopWishlistItem.items);
 
-    const removeItemFromWishlist = (removeId) => {
-        dispatch(removeWishlistItem(removeId));
+    const removeItemFromWishlist = (id) => {
+        dispatch(removeWishlistItem(id)); // this id will be replace on removeWishlistItem of store
     };
 
-    const moveWishlistItemToCart = (item) => {
-        dispatch(cartItem({ id: item.id, image: item.image, name: item.name, cost: item.cost, totalCost: item.totalCost, count: item.count }));
-        dispatch(removeWishlistItem(item.id))
-        setToggle(true)
-    }
+    const moveToCart = (item) => {
+        dispatch(cartItem({ ...item })); // item will 'spread' from wishlist to cart page 
+        dispatch(removeWishlistItem(item.id)) // at the same time of 'spread', the item should be removed
+    };
 
     return (
-        <div className="cart-container">
+        <div className="wishlist-container">
             <Header />
             {wishlistItems.length > 0 ? (
-                <div className='display-shopping-items'>
-                    <h3 className='wishlistText'>Wishlist</h3>
-                    <div className='wishlist-section'>
-                        {wishlistItems.map((item, index) => (
-                            <div key={index} className='wishlistItems'>
-                                <img src={item.image} />
-                                <h3>{item.name}</h3>
-                                <p>Price: ${item.cost}</p>
-                                <Button className='wishlistToCartBtn' type="primary" onClick={() => moveWishlistItemToCart(item)}>
-                                    Move to cart
-                                </Button>
-                                <Button className='removeBtn' type="primary" onClick={() => removeItemFromWishlist(item.id)}>
-                                    Remove
-                                </Button>
+                <div>
+                    <h3 className="wishlistText">Wishlist</h3>
+                    <div className="wishlist-section">
+                        {wishlistItems.map((item) => (
+                            <div key={item.id} className="wishlistItems">
+                                <img src={item.thumbnail} />
+                                <h3 className="itemName">{item.name}</h3>
+                                <p>Price: ₹{item.price}</p>
+                                <div className="wishlist-buttons">
+                                    <Button type="primary" className="wishlistToCartBtn" onClick={() => moveToCart(item)}>
+                                        Move to Cart
+                                    </Button>
+                                    <Button type="primary" className="removeBtn" onClick={() => removeItemFromWishlist(item.id)}>
+                                        Remove
+                                    </Button>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             ) : (
-                <h3 className='wishlistText'>Your wishlist is empty</h3>
+                <h3 className="wishlistText">Your wishlist is empty</h3>
             )}
         </div>
     );

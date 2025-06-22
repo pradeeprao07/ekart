@@ -1,4 +1,3 @@
-import React from "react";
 import { MobileItems } from "./Items";
 import Calculation from "./Calculation";
 import Header from "./Header";
@@ -10,11 +9,12 @@ export default function Mobile() {
             <div className="shopping-content">
                 <div className="digital-item">
                     {MobileItems.map((item) => (
+                        // id, thumbnail, name and price because of dynamic content (differs for each item)
                         <Calculation
                             id={item.id}
-                            image={item.image}
+                            thumbnail={item.thumbnail}
                             name={item.name}
-                            cost={item.cost}    
+                            price={item.price}    
                         />
                     ))}
                 </div>

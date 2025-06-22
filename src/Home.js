@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from 'antd';
 import { auth, provider } from "./firebaseConfig";
-import { signInWithPopup, signOut } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 
 function HomePage() {
     const [showContent, setShowContent] = useState(false);
@@ -11,8 +11,8 @@ function HomePage() {
     useEffect(() => {
         setTimeout(() => {
             setShowContent(true);
-        }, 1000);
-    }, []);
+        }, 1000); // shows after 1sec, when the content is ready
+    }, []); // [] runs only on the 1st render(loads)
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -21,14 +21,15 @@ function HomePage() {
         };
     }, []);
 
-    const handleLogin = async () => {
+    const handleLogin = async () => { // async lets the await inside it hold the execution
         try {
             provider.setCustomParameters({
-                prompt: "select_account"
-            });
-            const result = await signInWithPopup(auth, provider)
-            console.log("Successfully logged in", result)
-            navigate('/mobile')
+                prompt: "select_account" // this allows to select account the everytime
+            }); 
+            // signInWithPopup() opens the google sign and lets the user login
+            const result = await signInWithPopup(auth, provider) // await holds the execution untill signInWithPopup() is done
+            console.log("Successfully logged in", result) 
+            navigate('/mobile') // after the login done with signInWithPopup() only then the next will be executed 
         } catch (error) {
             console.log("Failed to login", error)
         }
